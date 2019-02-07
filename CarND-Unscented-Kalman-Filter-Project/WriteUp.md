@@ -41,4 +41,4 @@ The NIS plot shows that the LIDAR measurement provide more accurate result than 
 <p align="center">
   <img src="/CarND-Unscented-Kalman-Filter-Project/CarND-Unscented-Kalman-Filter-Project/pics/lidar_radar.png" width="1000" /> 
 </p>
-
+The result shows that kalmen filter with LIDAR measurment are better than RADAR, yet the result of sensor fusion is far better than both of them and by using the sigma points instead of linearization, the UKF are also superior than the EKF.
