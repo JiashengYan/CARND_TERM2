@@ -27,6 +27,7 @@ the following figure describes the motion model of the state vector of a vehicle
   - Variable boundaries: all variables were limited by their corresponding physical plausible value.
 * Latency: In order to deal with the delay of actuators, I simply predict the values of the state vector in the latency of 100 millisecond 
 under the current actuation and feed the predicted state to the controller. The changes on speed, yaw angle and posion in x direction were taken into consideration while other changes were neglected.
+* Reference line: the reference trajectory points were fitted by polyfit as a order 3 polynomial.
 
 
 
