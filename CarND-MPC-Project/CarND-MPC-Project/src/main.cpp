@@ -16,7 +16,7 @@ using nlohmann::json;
 using std::string;
 using std::vector;
 
-static int LATENCY = 100; // latency in millisecond
+static int LATENCY = 100/1000; // latency in millisecond
 
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
@@ -75,12 +75,22 @@ int main() {
           Eigen::VectorXd state(6);
           
           const double Lf = 2.67;
-          double vkph = v * 1.609344;
-          double vx = 0 + vkph * 100 / (1000 * 60 * 60); // move forward the projected distance to cover 100 ms of latency
-          double vy = 0;
-          double vpsi = 0 - ( v * steer_value * deg2rad(25) * LATENCY / (Lf * 1000) );
-          v += throttle_value * LATENCY / 1000;
-          state << vx, vy, vpsi, v, cte, epsi;
+          
+          const double x0 = 0;
+          const double y0 = 0;
+          const double psi0 = 0;
+          const double cte0 = coeffs[0];
+          const double epsi0 = -atan(coeffs[1]);
+          
+          // State after delay.
+          double x_delay = x0 + ( v * cos(psi0) * LATENCY );
+          double y_delay = y0 + ( v * sin(psi0) * LATENCY );
+          double psi_delay = psi0 - ( v * steer_value * deg2rad(25) * LATENCY / Lf );
+          double v_delay = v + throttle_value * LATENCY;
+          double cte_delay = cte0 + ( v * sin(epsi0) * LATENCY );
+          double epsi_delay = epsi0 - ( v * atan(coeffs[1]) * LATENCY / Lf );
+          
+          state << x_delay, y_delay, psi_delay, v_delay, cte_delay, epsi_delay;
           auto vars = mpc.Solve(state, coeffs);
           
           steer_value = - vars[0]/ deg2rad(25) ; // normalise - simulator has steering input [-1,1]
