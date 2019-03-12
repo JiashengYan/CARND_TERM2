@@ -88,7 +88,7 @@ int main() {
           double psi_delay = psi0 - ( v * steer_value * deg2rad(25) * LATENCY / Lf );
           double v_delay = v + throttle_value * LATENCY;
           double cte_delay = cte0 + ( v * sin(epsi0) * LATENCY );
-          double epsi_delay = epsi0 - ( v * atan(coeffs[1]) * LATENCY / Lf );
+          double epsi_delay = epsi0 - ( v * steer_value * deg2rad(25) * LATENCY / Lf );
           
           state << x_delay, y_delay, psi_delay, v_delay, cte_delay, epsi_delay;
           auto vars = mpc.Solve(state, coeffs);
